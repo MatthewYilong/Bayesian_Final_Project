@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is the final project for STAT 465 Bayesian Statistics, Spring 2024. The project provides a brief introduction to the Bayesian Neural Network, its properties, and architecture. It then demonstrates the application of the LSTM model in MINIST multi-classification task. 
+This is the final project for STAT 465 Bayesian Statistics, Spring 2024. The project provides a brief introduction to the Bayesian Neural Network, its properties, and architecture. It then demonstrates the application of Bayesian Neural Network in MINIST multi-classification task. 
 
 ## Dependencies
 
