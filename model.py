@@ -5,10 +5,18 @@ import pyro
 from pyro.distributions import Normal, Categorical
 
 class BNN(nn.Module): 
+    '''
+    Initializes a Bayesian Neural Network with one hidden layer.
+
+    Parameters:
+        input_size (int): The size of the input layer.
+        output_size (int): The size of the output layer.
+        hidden_size (int): The size of the hidden layer.         
+    '''
     def __init__(self, input_size, output_size, hidden_size): 
         super().__init__()
-        self.fc = nn.Linear(input_size, hidden_size) 
-        self.output = nn.Linear(hidden_size, output_size) 
+        self.fc = nn.Linear(input_size, hidden_size) # Input to hidden layer
+        self.output = nn.Linear(hidden_size, output_size) # Hidden to output layer 
         
     def forward(self, x):
         out = self.fc(x)
@@ -18,6 +26,15 @@ class BNN(nn.Module):
     
 
 def model(x_data, y_data, net = BNN(28*28, 10, 1024)):
+    ''' 
+    Defines the probabilistic model for Bayesian inference. 
+    Sets priors for the network's weights and biases.
+    
+    Parameters:
+        x_data (torch.Tensor): The input data.
+        y_data (torch.Tensor): The target data.
+        net (BNN): An instance of the BNN class.
+    '''
     ## piror for dense layer 
     fc_weight_prior = Normal(loc=torch.zeros_like(net.fc.weight), scale=torch.ones_like(net.fc.weight))
     fc_bias_prior = Normal(loc=torch.zeros_like(net.fc.bias), scale=torch.ones_like(net.fc.bias))
@@ -31,7 +48,7 @@ def model(x_data, y_data, net = BNN(28*28, 10, 1024)):
               'output.bias': output_bias_prior}
     # lift module parameters to random variables sampled from the priors
     lifted_module = pyro.random_module("module", net, priors)
-    # sample a regressor (which also samples w and b)
+    # sample a regressor (which also samples weight and bias)
     lifted_reg_model = lifted_module()
     log_softmax = nn.LogSoftmax(dim=1) 
     lhat = log_softmax(lifted_reg_model(x_data))
@@ -39,6 +56,14 @@ def model(x_data, y_data, net = BNN(28*28, 10, 1024)):
 
 
 def guide(x_data, y_data, net = BNN(28*28, 10, 1024)):
+    ''' 
+    Defines the variational guide for Bayesian inference. Sets learnable parameters for the weight and bias distributions. 
+    
+    Parameters:
+        x_data (torch.Tensor): The input data.
+        y_data (torch.Tensor): The target data.
+        net (BNN): An instance of the BNN class.
+    '''
     softplus = torch.nn.Softplus()
     # First layer weight distribution priors
     fc_weight_mu = torch.randn_like(net.fc.weight)
