@@ -8,7 +8,7 @@ This is the final project for STAT 465 Bayesian Statistics, Spring 2024. The pro
 
 ### Basic
 - [Numpy](https://numpy.org/)
-- Matplotlib
+- [Matplotlib](https://matplotlib.org)
 
 ### Deep Learning
 - [PyTorch](https://pytorch.org/)
