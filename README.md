@@ -1,4 +1,4 @@
-# Bayesian_Final_Project
+# Bayesian Neural Network
 
 ## Overview
 
